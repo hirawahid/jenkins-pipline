@@ -1,13 +1,15 @@
-node {
-	stage ('SCM checkout'){
-		git "https://gitlab.com/mbabilo/experitest"
-		}
-	stage ('Build'){
-    	dir("comtest") {
-	   sh "mvn clean install"
-       }
-       	dir("comtest/target") {
-	   sh "java -jar com.test-1.0-SNAPSHOT.jar"
-       }
-		}
+pipeline {
+  agent { docker { image 'python:3.7.2' } }
+  stages {
+    stage('build') {
+      steps {
+        sh 'pip install -r requirements.txt'
+      }
+    }
+    stage('test') {
+      steps {
+        sh 'python Tests.py'
+      }   
+    }
+  }
 }
